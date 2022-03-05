@@ -63,5 +63,5 @@ RSpec.configure do |config|
   # config.filter_gems_from_backtrace("gem name")
 
   # FactoryBot を省略できるようにする
-  config.include FactoryBot::Synatax::Methods
+  config.include FactoryBot::Syntax::Methods
 end
