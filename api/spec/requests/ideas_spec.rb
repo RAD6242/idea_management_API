@@ -67,4 +67,69 @@ RSpec.describe 'Ideas', type: :request do
       end
     end
   end
+
+  describe 'アイデア取得API' do
+    context 'リクエストのcategory_nameが指定されている場合' do
+      before do
+        @task_category = create(:category, :task)
+        @task_idea = create(:idea, :doing_task, category_id: @task_category.id)
+
+        @app_category = create(:category, :application)
+        @app_idea = create(:idea, :create_application, category_id: @app_category.id)
+      end
+
+      it '登録されたcategoryなら、該当するcategoryのidea一覧を返却する' do
+        # task_ideaの取得を試みる
+        get api_v1_ideas_path, params: {
+          category_name: @task_category.name
+        }
+        expect(response.data).to eq(
+          {
+            id: @task_idea.id,
+            category: @task_category.name,
+            body: @task_idea.body,
+            created_at: Time.parse(@task_idea.created_at).to_i
+          }
+        )
+      end
+
+      it '登録されていないcategoryなら、404を返す' do
+        expect do
+          get api_v1_ideas_path, params: {
+            category_name: build(:category, :meeting)
+          }
+        end.to have_http_status 404
+      end
+    end
+
+    context 'リクエストのcategory_nameが指定されていない場合' do
+      before do
+        @task_category = create(:category, :task)
+        @task_idea = create(:idea, :doing_task, category_id: @task_category.id)
+
+        @app_category = create(:category, :application)
+        @app_idea = create(:idea, :create_application, category_id: @app_category.id)
+      end
+
+      it 'すべてのideasを返却する' do
+        get api_v1_ideas_path
+
+        expect(response.data).to eq(
+          {
+            id: @task_idea.id,
+            category: @task_category.name,
+            body: @task_idea.body,
+            created_at: Time.parse(@task_idea.created_at).to_i
+          },
+          {
+            id: @app_idea.id,
+            category: @app_category.name,
+            body: @app_idea.body,
+            created_at: Time.parse(@app_idea.created_at).to_i
+          }
+        )
+      end
+    end
+    
+  end
 end
