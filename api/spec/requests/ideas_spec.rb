@@ -76,6 +76,20 @@ RSpec.describe 'Ideas', type: :request do
 
         @app_category = create(:category, :application)
         @app_idea = create(:idea, :create_application, category_id: @app_category.id)
+
+        @expect_return_task_idea_json = {
+          id: @task_idea.id,
+          category: @task_category.name,
+          body: @task_idea.body,
+          created_at: Time.parse(@task_idea.created_at.to_s(:db)).to_i
+        }.to_json
+
+        @expect_return_app_idea_json = {
+          id: @task_idea.id,
+          category: @task_category.name,
+          body: @task_idea.body,
+          created_at: Time.parse(@task_idea.created_at.to_s(:db)).to_i
+        }.to_json
       end
 
       it '登録されたcategoryなら、該当するcategoryのidea一覧を返却する' do
@@ -83,22 +97,16 @@ RSpec.describe 'Ideas', type: :request do
         get api_v1_ideas_path, params: {
           category_name: @task_category.name
         }
-        expect(response.data).to eq(
-          {
-            id: @task_idea.id,
-            category: @task_category.name,
-            body: @task_idea.body,
-            created_at: Time.parse(@task_idea.created_at).to_i
-          }
+        expect(JSON.parse(response.body)).to eq(
+          [JSON.parse(@expect_return_task_idea_json)]
         )
       end
 
       it '登録されていないcategoryなら、404を返す' do
-        expect do
-          get api_v1_ideas_path, params: {
-            category_name: build(:category, :meeting)
-          }
-        end.to have_http_status 404
+        get api_v1_ideas_path, params: {
+          category_name: build(:category, :meeting)
+        }
+        expect(response).to have_http_status(404)
       end
     end
 
@@ -109,27 +117,32 @@ RSpec.describe 'Ideas', type: :request do
 
         @app_category = create(:category, :application)
         @app_idea = create(:idea, :create_application, category_id: @app_category.id)
+
+        @expect_return_task_idea_json = {
+          id: @task_idea.id,
+          category: @task_category.name,
+          body: @task_idea.body,
+          created_at: Time.parse(@task_idea.created_at.to_s(:db)).to_i
+        }.to_json
+
+        @expect_return_app_idea_json = {
+          id: @app_idea.id,
+          category: @app_category.name,
+          body: @app_idea.body,
+          created_at: Time.parse(@app_idea.created_at.to_s(:db)).to_i
+        }.to_json
       end
 
       it 'すべてのideasを返却する' do
         get api_v1_ideas_path
 
-        expect(response.data).to eq(
-          {
-            id: @task_idea.id,
-            category: @task_category.name,
-            body: @task_idea.body,
-            created_at: Time.parse(@task_idea.created_at).to_i
-          },
-          {
-            id: @app_idea.id,
-            category: @app_category.name,
-            body: @app_idea.body,
-            created_at: Time.parse(@app_idea.created_at).to_i
-          }
+        expect(JSON.parse(response.body)).to eq(
+          [
+            JSON.parse(@expect_return_task_idea_json),
+            JSON.parse(@expect_return_app_idea_json)
+          ]
         )
       end
     end
-    
   end
 end
