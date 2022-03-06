@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe Idea, type: :model do
-  context '既存のカテゴリーを持つideaについて検証した場合' do
+  context 'ideaの有効性について検証した場合' do
     before do
       @exist_category = create(:category, :task)
     end
