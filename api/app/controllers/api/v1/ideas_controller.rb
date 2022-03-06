@@ -11,9 +11,9 @@ module Api
           return
         end
 
-        category_id = Category.find_by(name: params[:category_name])
-        if category_id
-          render json: Idea.return_select_ideas(category_id)
+        category = Category.find_by(name: params[:category_name])
+        if category
+          render json: Idea.return_select_ideas(category)
         else
           render status: 404
         end
