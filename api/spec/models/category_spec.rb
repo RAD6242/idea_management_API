@@ -1,8 +1,18 @@
 require 'rails_helper'
 
 RSpec.describe Category, type: :model do
-  context 'idea' do
+  context '保存前のモデルについて検証した場合' do
+    it 'nameに値があれば有効' do
+      expect(build(:category, :task)).to be_valid
+    end
 
+    it 'nameに値がなければ無効' do
+      expect(Category.new(name: nil)).to_not be_valid
+    end
+
+    it 'nameが空白文字のみなら無効' do
+      expect(Category.new(name: nil)).to_not be_valid
+    end
   end
 
   context '新規のカテゴリーを保存しようとした場合' do
@@ -11,11 +21,11 @@ RSpec.describe Category, type: :model do
     end
 
     it 'nameに値がなければ保存できず例外が発生する' do
-      expect { Category.create(name: '') }.to raise_error
+      expect { Category.create!(name: nil) }.to raise_error ActiveRecord::RecordInvalid
     end
 
     it '空白文字では保存できず例外が発生する' do
-      expect { Category.create(name: '     ') }.to raise_error
+      expect { Category.create!(name: '     ') }.to raise_error ActiveRecord::RecordInvalid
     end
   end
 
@@ -25,11 +35,7 @@ RSpec.describe Category, type: :model do
     end
 
     it '保存できず例外が発生する' do
-      existed_task = build(:category, :task)
-      expect { existed_task.save }.to raise_error ActiveRecord::RecordNotUnique
+      expect { create(:category, :task) }.to raise_error ActiveRecord::RecordInvalid
     end
-
-    # it 'categoriesの件数は変わらない' do
-    # end
   end
 end
