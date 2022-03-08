@@ -18,3 +18,8 @@ AllCops:
 Metrics/BlockLength:
   Exclude:
     - 'spec/**/*'
+
+# spec_helper.rbで自動生成されたブロックコメントのため除外
+Style/BlockComments:
+  Exclude:
+    - 'spec/spec_helper.rb'
