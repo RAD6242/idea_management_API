@@ -3,6 +3,7 @@ AllCops:
   Exclude:
     - "app/channels/**/*"
     - "app/mailers/**/*"
+    - "app/jobs/**/*"
     - "bin/**"
     - "config/**/*"
     - "config.ru"
