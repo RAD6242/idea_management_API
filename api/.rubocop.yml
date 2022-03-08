@@ -2,14 +2,16 @@
 AllCops:
   Exclude:
     - "app/channels/**/*"
+    - "app/mailers/**/*"
     - "bin/**"
     - "config/**/*"
+    - "config.ru"
     - "db/schema.rb"
     - "Gemfile"
     - "lib/**/*"
-    - "node_modules/**/*"
     - "tmp/**/*"
     - "vendor/**/*"
+    - "Rakefile"
 # Please also note that you can opt-in to new cops by default by adding this to your config:
   NewCops: enable
 
