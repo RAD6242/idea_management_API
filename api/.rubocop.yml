@@ -1,3 +1,12 @@
+# 自動生成されるものは除外する
+AllCops:
+  Exclude:
+    - "vendor/**/*"
+    - "db/schema.rb"
+# Please also note that you can opt-in to new cops by default by adding this to your config:
+  NewCops: enable
+
+# specはブロック内のコードが多くなってしまう箇所があるので除外する
 # Block has too many line.
 Metrics/BlockLength:
   Exclude:
