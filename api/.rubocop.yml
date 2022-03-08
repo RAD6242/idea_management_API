@@ -1,8 +1,15 @@
 # 自動生成されるものは除外する
 AllCops:
   Exclude:
-    - "vendor/**/*"
+    - "app/channels/**/*"
+    - "bin/**"
+    - "config/**/*"
     - "db/schema.rb"
+    - "Gemfile"
+    - "lib/**/*"
+    - "node_modules/**/*"
+    - "tmp/**/*"
+    - "vendor/**/*"
 # Please also note that you can opt-in to new cops by default by adding this to your config:
   NewCops: enable
 
