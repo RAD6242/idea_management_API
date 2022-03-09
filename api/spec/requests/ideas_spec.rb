@@ -68,6 +68,60 @@ RSpec.describe 'Ideas', type: :request do
         end.to change { Category.count }.from(1).to(2)
       end
     end
+
+    context 'リクエストのcategory_nameが無効な場合' do
+      it 'nilなら422を返す' do
+        post api_v1_ideas_path, params: {
+          category_name: nil,
+          body: build(:idea, :doing_task)
+        }
+        expect(response).to have_http_status 422
+      end
+
+      it '空文字列なら422を返す' do
+        post api_v1_ideas_path, params: {
+          category_name: '            ',
+          body: build(:idea, :doing_task)
+        }
+        expect(response).to have_http_status 422
+      end
+
+      it 'ideasテーブルに登録できず、Categoryの件数は増加しない' do
+        expect do
+          post api_v1_ideas_path, params: {
+            category_name: nil,
+            body: build(:idea, :doing_task)
+          }
+        end.to change { Category.count }.by(0)
+      end
+    end
+
+    context 'リクエストのbodyが無効な場合' do
+      it 'nilなら422を返す' do
+        post api_v1_ideas_path, params: {
+          category_name: build(:category, :task),
+          body: nil
+        }
+        expect(response).to have_http_status 422
+      end
+
+      it '空文字列なら422を返す' do
+        post api_v1_ideas_path, params: {
+          category_name: build(:category, :task),
+          body: '            '
+        }
+        expect(response).to have_http_status 422
+      end
+
+      it 'ideasテーブルに登録できず、Categoryの件数は増加しない' do
+        expect do
+          post api_v1_ideas_path, params: {
+            category_name: build(:category, :task),
+            body: nil
+          }
+        end.to change { Category.count }.by(0)
+      end
+    end
   end
 
   describe 'アイデア取得API' do
