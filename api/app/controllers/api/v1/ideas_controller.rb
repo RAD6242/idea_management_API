@@ -20,12 +20,16 @@ module Api
       end
 
       def create
-        category = Category.find_or_create_by(name: params[:category_name])
-        if Idea.create!(category_id: category.id, body: params[:body])
-          render status: 201
-        else
+        # category_name, bodyがnilや空文字なら早期リターン
+        if params[:category_name].blank? || params[:body].blank?
           render status: 422
+          return
         end
+
+        category = Category.find_or_create_by(name: params[:category_name])
+        Idea.create(category_id: category.id, body: params[:body])
+
+        render status: 201
       end
     end
   end
