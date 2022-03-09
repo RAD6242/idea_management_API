@@ -151,17 +151,7 @@ RSpec.describe 'Ideas', type: :request do
         @task_category = create(:category, :task)
         @task_idea = create(:idea, :doing_task, category_id: @task_category.id)
 
-        @app_category = create(:category, :application)
-        @app_idea = create(:idea, :create_application, category_id: @app_category.id)
-
         @expect_return_task_idea_json = {
-          id: @task_idea.id,
-          category: @task_category.name,
-          body: @task_idea.body,
-          created_at: Time.parse(@task_idea.created_at.to_s(:db)).to_i
-        }.to_json
-
-        @expect_return_app_idea_json = {
           id: @task_idea.id,
           category: @task_category.name,
           body: @task_idea.body,
