@@ -20,8 +20,10 @@ module Api
       end
 
       def create
-        category = Category.find_or_create_by(name: params[:category_name])
-        if Idea.create!(category_id: category.id, body: params[:body])
+        # category_name, bodyに対してnil, 空文字, 長さの検証を行う
+        if Category.name_validation_check(params[:category_name]) && Idea.body_validation_check(params[:body])
+          category = Category.find_or_create_by(name: params[:category_name])
+          Idea.create(category_id: category.id, body: params[:body])
           render status: 201
         else
           render status: 422

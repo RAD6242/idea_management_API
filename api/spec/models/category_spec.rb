@@ -2,6 +2,9 @@
 
 require 'rails_helper'
 
+MAX_STRING_LENGTH = 255
+OVER_LIMIT_STRING_LENGTH = MAX_STRING_LENGTH + 1
+
 RSpec.describe Category, type: :model do
   context '保存前のモデルについて検証した場合' do
     it 'nameに値があれば有効' do
@@ -14,6 +17,10 @@ RSpec.describe Category, type: :model do
 
     it 'nameが空白文字のみなら無効' do
       expect(Category.new(name: nil)).to_not be_valid
+    end
+
+    it "nameが#{OVER_LIMIT_STRING_LENGTH}文字以上なら無効" do
+      expect(Category.new(name: 'a' * OVER_LIMIT_STRING_LENGTH)).to_not be_valid
     end
   end
 
@@ -28,6 +35,10 @@ RSpec.describe Category, type: :model do
 
     it '空白文字では保存できず例外が発生する' do
       expect { Category.create!(name: '     ') }.to raise_error ActiveRecord::RecordInvalid
+    end
+
+    it "nameが#{OVER_LIMIT_STRING_LENGTH}文字以上なら保存できず例外が発生する" do
+      expect { Category.create!(name: 'a' * OVER_LIMIT_STRING_LENGTH) }.to raise_error ActiveRecord::RecordInvalid
     end
   end
 

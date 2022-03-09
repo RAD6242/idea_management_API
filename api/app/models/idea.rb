@@ -2,7 +2,9 @@
 
 # Ideaモデルのvalidationやメソッドを定義
 class Idea < ApplicationRecord
-  validates :body, presence: true
+  MAX_TEXT_LENGTH = 65_535
+
+  validates :body, presence: true, length: { maximum: MAX_TEXT_LENGTH }
   belongs_to :category
 
   def self.return_all_ideas
@@ -15,6 +17,11 @@ class Idea < ApplicationRecord
     Idea.where(category_id: category.id).map do |item|
       item.idea_format_json(category.name)
     end
+  end
+
+  # null, 空文字, 長さの検証を行う
+  def self.body_validation_check(body)
+    !body.blank? && body.length < MAX_TEXT_LENGTH
   end
 
   def idea_format_json(category_name)
