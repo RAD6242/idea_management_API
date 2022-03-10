@@ -1,0 +1,28 @@
+# 自動生成されるものは除外する
+AllCops:
+  Exclude:
+    - "app/channels/**/*"
+    - "app/mailers/**/*"
+    - "app/jobs/**/*"
+    - "bin/**"
+    - "config/**/*"
+    - "config.ru"
+    - "db/schema.rb"
+    - "Gemfile"
+    - "lib/**/*"
+    - "tmp/**/*"
+    - "vendor/**/*"
+    - "Rakefile"
+# Please also note that you can opt-in to new cops by default by adding this to your config:
+  NewCops: enable
+
+# specはブロック内のコードが多くなってしまう箇所があるので除外する
+# Block has too many line.
+Metrics/BlockLength:
+  Exclude:
+    - 'spec/**/*'
+
+# spec_helper.rbで自動生成されたブロックコメントのため除外
+Style/BlockComments:
+  Exclude:
+    - 'spec/spec_helper.rb'
